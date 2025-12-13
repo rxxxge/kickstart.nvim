@@ -234,6 +234,21 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   end
 end
 
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'c', 'cpp' },
+  callback = function()
+    if vim.bo.filetype == 'c' then
+      vim.bo.tabstop = 4
+      vim.bo.shiftwidth = 4
+      vim.bo.softtabstop = 4
+    elseif vim.bo.filetype == 'cpp' then
+      vim.bo.tabstop = 4
+      vim.bo.shiftwidth = 4
+      vim.bo.softtabstop = 4
+    end
+  end,
+})
+
 ---@type vim.Option
 local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
@@ -645,7 +660,8 @@ require('lazy').setup({
       vim.diagnostic.config {
         severity_sort = true,
         float = { border = 'rounded', source = 'if_many' },
-        underline = { severity = vim.diagnostic.severity.ERROR },
+        -- underline = { severity = vim.diagnostic.severity.ERROR },
+        underline = false,
         signs = vim.g.have_nerd_font and {
           text = {
             [vim.diagnostic.severity.ERROR] = '󰅚 ',
@@ -908,7 +924,7 @@ require('lazy').setup({
         underline = true,
         bold = true,
         italic = {
-          strings = true,
+          strings = false,
           emphasis = true,
           comments = false,
           operators = false,
@@ -919,7 +935,7 @@ require('lazy').setup({
         invert_signs = false,
         invert_tabline = false,
         inverse = true, -- invert background for search, diffs, statuslines and errors
-        contrast = 'hard', -- can be "hard", "soft" or empty string
+        contrast = '', -- can be "hard", "soft" or empty string
         palette_overrides = {},
         overrides = {},
         dim_inactive = false,
@@ -1049,21 +1065,6 @@ require('lazy').setup({
       lazy = '💤 ',
     },
   },
-})
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'c', 'cpp' },
-  callback = function()
-    if vim.bo.filetype == 'c' then
-      vim.bo.tabstop = 4
-      vim.bo.shiftwidth = 4
-      vim.bo.softtabstop = 4
-    elseif vim.bo.filetype == 'cpp' then
-      vim.bo.tabstop = 4
-      vim.bo.shiftwidth = 4
-      vim.bo.softtabstop = 4
-    end
-  end,
 })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
