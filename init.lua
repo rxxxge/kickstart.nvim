@@ -119,9 +119,10 @@ vim.schedule(function()
 end)
 
 -- Enable break indent
-vim.o.breakindent = true
+vim.o.breakindent = false
+vim.o.wrap = false
 
--- Save undo history
+-- -- Save undo history
 vim.o.undofile = true
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
@@ -246,6 +247,27 @@ vim.api.nvim_create_autocmd('FileType', {
       vim.bo.shiftwidth = 4
       vim.bo.softtabstop = 4
     end
+  end,
+})
+
+-- For C and CPP comments
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'c', 'cpp' },
+  callback = function()
+    vim.opt_local.formatoptions:append 'r'
+    vim.opt_local.formatoptions:append 'o'
+    vim.opt_local.comments = 'sO:* -,mO:*  ,exO:*/,s1:/*,mb:*,ex:*/,://'
+  end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'c', 'h' },
+  callback = function()
+    completion = {
+      menu = {
+        auto_show = false,
+      },
+    }
   end,
 })
 
@@ -702,7 +724,7 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
+        clangd = {},
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
@@ -837,7 +859,29 @@ require('lazy').setup({
           --   end,
           -- },
         },
-        opts = {},
+        opts = function(_, opts)
+          local completion_toggle = Snacks.toggle {
+            name = 'Completion',
+            get = function()
+              return vim.b.completion
+            end,
+            set = function(state)
+              vim.b.completion = state
+            end,
+          }
+
+          local function toggle_completion()
+            require('blink.cmp').hide()
+            completion_toggle:toggle()
+          end
+
+          vim.keymap.set({ 'i', 'n' }, '<C-a>', toggle_completion, { desc = 'Toggle Completion' })
+          opts.enabled = function()
+            return vim.b.completion
+          end
+
+          return opts
+        end,
       },
       'folke/lazydev.nvim',
     },
@@ -952,6 +996,44 @@ require('lazy').setup({
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
+  {
+    'folke/snacks.nvim',
+    priority = 1000,
+    lazy = false,
+    ---@type snacks.Config
+    opts = {
+      bigfile = { enabled = true },
+      dashboard = { enabled = true },
+      explorer = { enabled = true },
+      indent = { enabled = true },
+      input = { enabled = true },
+      picker = { enabled = true },
+      notifier = { enabled = true },
+      quickfile = { enabled = true },
+      scope = { enabled = true },
+      scroll = { enabled = true },
+      -- statuscolumn = { enabled = true },
+      words = { enabled = true },
+      zen = { enabled = true },
+    },
+    keys = {
+      {
+        '<leader>e',
+        function()
+          Snacks.explorer()
+        end,
+        desc = 'File Explorer',
+      },
+      {
+        '<leader>z',
+        function()
+          Snacks.zen()
+        end,
+        desc = 'Toggle Zen Mode',
+      },
+    },
+  },
+
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     config = function()
@@ -1032,7 +1114,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
-  require 'kickstart.plugins.neo-tree',
+  -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
