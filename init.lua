@@ -294,7 +294,7 @@ rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
+  -- 'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
 
   {
     'NMAC427/guess-indent.nvim',
@@ -303,6 +303,14 @@ require('lazy').setup({
         auto_cmd = true,
       }
     end,
+  },
+
+  {
+    "OXY2DEV/markview.nvim",
+    lazy = false,
+
+    -- Completion for `blink.cmp`
+    -- dependencies = { "saghen/blink.cmp" },
   },
 
   -- NOTE: Plugins can also be added by using a table,
@@ -358,6 +366,7 @@ require('lazy').setup({
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
+      preset = 'modern',
       -- delay between pressing a key and opening which-key (milliseconds)
       -- this setting is independent of vim.o.timeoutlen
       delay = 0,
@@ -405,7 +414,6 @@ require('lazy').setup({
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
         { '<leader>f', group = '[F]ind' },
         { '<leader>g', group = '[G]it' },
-        { '<leader>s', group = '[S]earch' },
       },
     },
   },
@@ -681,11 +689,14 @@ require('lazy').setup({
           -- code, if the language server you are using supports them
           --
           -- This may be unwanted, since they displace some of your code
-          if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
-            map('<leader>th', function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-            end, '[T]oggle Inlay [H]ints')
-          end
+          --
+          -- TODO: Maybe remove
+          --
+          -- if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
+          --   map('<leader>th', function()
+          --     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
+          --   end, '[T]oggle Inlay [H]ints')
+          -- end
         end,
       })
 
@@ -800,14 +811,15 @@ require('lazy').setup({
       }
     end,
   },
-
+  
+  -- TODO: REMOVE Maybe
   { -- Autoformat
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
     cmd = { 'ConformInfo' },
     keys = {
       -- {
-      --   -- '<leader>f',
+      --   '<leader>F',
       --   function()
       --     require('conform').format { async = true, lsp_format = 'fallback' }
       --   end,
@@ -817,20 +829,20 @@ require('lazy').setup({
     },
     opts = {
       notify_on_error = false,
-      format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { lua = true, c = true, cpp = true }
-        if disable_filetypes[vim.bo[bufnr].filetype] then
-          return nil
-        else
-          return {
-            timeout_ms = 500,
-            lsp_format = 'fallback',
-          }
-        end
-      end,
+      -- format_on_save = function(bufnr)
+      --   -- Disable "format_on_save lsp_fallback" for languages that don't
+      --   -- have a well standardized coding style. You can add additional
+      --   -- languages here or re-enable it for the disabled ones.
+      --   local disable_filetypes = { lua = true, c = true, cpp = true }
+      --   if disable_filetypes[vim.bo[bufnr].filetype] then
+      --     return nil
+      --   else
+      --     return {
+      --       timeout_ms = 500,
+      --       lsp_format = 'fallback',
+      --     }
+      --   end
+      -- end,
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
@@ -887,7 +899,7 @@ require('lazy').setup({
             completion_toggle:toggle()
           end
 
-          vim.keymap.set({ 'i', 'n' }, '<C-a>', toggle_completion, { desc = 'Toggle Completion' })
+          vim.keymap.set({ 'i', 'n' }, '<leader>t<C-a>', toggle_completion, { desc = 'Toggle Completion' })
           opts.enabled = function()
             return vim.b.completion
           end
@@ -1008,6 +1020,7 @@ require('lazy').setup({
       require('tokyonight').setup {
         styles = {
           comments = { italic = false }, -- Disable italics in comments
+          keywords = { italic = false }
         },
       }
 
@@ -1031,7 +1044,7 @@ require('lazy').setup({
       indent = { enabled = true },
       input = { enabled = true },
       picker = { enabled = true },
-      notifier = { enabled = true },
+      notifier = { enabled = false },
       quickfile = { enabled = true },
       scope = { enabled = true },
       scroll = { enabled = true },
@@ -1039,7 +1052,7 @@ require('lazy').setup({
       words = { enabled = true },
       zen = { enabled = true },
       lazygit = { enabled = true },
-      terminal = { enabled = true },
+      terminal = { enabled = false },
       scratch = { enabled = false },
       toggle = { enabled = true },
       win = { enabled = true }
@@ -1064,14 +1077,14 @@ require('lazy').setup({
       { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log" },
       { "<leader>gL", function() Snacks.picker.git_log_line() end, desc = "Git Log Line" },
       { "<leader>gs", function() Snacks.picker.git_status() end, desc = "Git Status" },
-      { "<leader>gS", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
+      -- { "<leader>gS", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
       { "<leader>gd", function() Snacks.picker.git_diff() end, desc = "Git Diff (Hunks)" },
       { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
       -- gh
-      { "<leader>gi", function() Snacks.picker.gh_issue() end, desc = "GitHub Issues (open)" },
-      { "<leader>gI", function() Snacks.picker.gh_issue({ state = "all" }) end, desc = "GitHub Issues (all)" },
-      { "<leader>gp", function() Snacks.picker.gh_pr() end, desc = "GitHub Pull Requests (open)" },
-      { "<leader>gP", function() Snacks.picker.gh_pr({ state = "all" }) end, desc = "GitHub Pull Requests (all)" },
+      -- { "<leader>gi", function() Snacks.picker.gh_issue() end, desc = "GitHub Issues (open)" },
+      -- { "<leader>gI", function() Snacks.picker.gh_issue({ state = "all" }) end, desc = "GitHub Issues (all)" },
+      -- { "<leader>gp", function() Snacks.picker.gh_pr() end, desc = "GitHub Pull Requests (open)" },
+      -- { "<leader>gP", function() Snacks.picker.gh_pr({ state = "all" }) end, desc = "GitHub Pull Requests (all)" },
       -- Grep
       { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
       { "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep Open Buffers" },
@@ -1087,7 +1100,7 @@ require('lazy').setup({
       { "<leader>sd", function() Snacks.picker.diagnostics() end, desc = "Diagnostics" },
       { "<leader>sD", function() Snacks.picker.diagnostics_buffer() end, desc = "Buffer Diagnostics" },
       { "<leader>sh", function() Snacks.picker.help() end, desc = "Help Pages" },
-      { "<leader>sH", function() Snacks.picker.highlights() end, desc = "Highlights" },
+      -- { "<leader>sH", function() Snacks.picker.highlights() end, desc = "Highlights" },
       { "<leader>si", function() Snacks.picker.icons() end, desc = "Icons" },
       { "<leader>sj", function() Snacks.picker.jumps() end, desc = "Jumps" },
       { "<leader>sk", function() Snacks.picker.keymaps() end, desc = "Keymaps" },
@@ -1110,18 +1123,18 @@ require('lazy').setup({
       { "<leader>ss", function() Snacks.picker.lsp_symbols() end, desc = "LSP Symbols" },
       { "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
       -- Other
-      { "<leader>z",  function() Snacks.zen() end, desc = "Toggle Zen Mode" },
-      { "<leader>Z",  function() Snacks.zen.zoom() end, desc = "Toggle Zoom" },
+      { "<leader>tz",  function() Snacks.zen() end, desc = "Toggle Zen Mode" },
+      -- { "<leader>Z",  function() Snacks.zen.zoom() end, desc = "Toggle Zoom" },
       -- { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
       -- { "<leader>S",  function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
       { "<leader>n",  function() Snacks.notifier.show_history() end, desc = "Notification History" },
       { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
       { "<leader>cR", function() Snacks.rename.rename_file() end, desc = "Rename File" },
       { "<leader>gB", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
-      { "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit" },
+      -- { "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit" },
       { "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
-      { "<c-/>",      function() Snacks.terminal() end, desc = "Toggle Terminal" },
-      { "<c-_>",      function() Snacks.terminal() end, desc = "which_key_ignore" },
+      -- { "<c-/>",      function() Snacks.terminal() end, desc = "Toggle Terminal" },
+      -- { "<c-_>",      function() Snacks.terminal() end, desc = "which_key_ignore" },
       { "]]",         function() Snacks.words.jump(vim.v.count1) end, desc = "Next Reference", mode = { "n", "t" } },
       { "[[",         function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference", mode = { "n", "t" } },
     },
@@ -1164,7 +1177,7 @@ require('lazy').setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
-  -- {
+  -- {('mini.ai')('mini.ai')
   --   'nvim-lualine/lualine.nvim',
   --   dependencies = { 'nvim-tree/nvim-web-devicons' },
   -- },
@@ -1221,25 +1234,25 @@ require('lazy').setup({
   -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
   -- you can continue same window with `<space>sr` which resumes last telescope search
 }, {
-  ui = {
-    -- If you are using a Nerd Font: set icons to an empty table which will use the
-    -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
-    icons = vim.g.have_nerd_font and {} or {
-      cmd = '⌘',
-      config = '🛠',
-      event = '📅',
-      ft = '📂',
-      init = '⚙',
-      keys = '🗝',
-      plugin = '🔌',
-      runtime = '💻',
-      require = '🌙',
-      source = '📄',
-      start = '🚀',
-      task = '📌',
-      lazy = '💤 ',
-    },
-  },
+  -- ui = {
+  --   -- If you are using a Nerd Font: set icons to an empty table which will use the
+  --   -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
+  --   icons = vim.g.have_nerd_font and {} or {
+  --     cmd = '⌘',
+  --     config = '🛠',
+  --     event = '📅',
+  --     ft = '📂',
+  --     init = '⚙',
+  --     keys = '🗝',
+  --     plugin = '🔌',
+  --     runtime = '💻',
+  --     require = '🌙',
+  --     source = '📄',
+  --     start = '🚀',
+  --     task = '📌',
+  --     lazy = '💤 ',
+  --   },
+  -- },
 })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
