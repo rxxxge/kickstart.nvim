@@ -188,8 +188,11 @@ vim.keymap.set('v', '>', '>gv', { desc = 'Indent right and reselect' })
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = 'Move selection down' })
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move selection up' })
 
-vim.keymap.set('n', 'q', '<nop>', { desc = 'Disable macro recording' })
+-- vim.keymap.set('n', 'q', '<nop>', { desc = 'Disable macro recording' })
 vim.keymap.set('n', 'Q', '<nop>', { desc = 'Disable Ex mode' })
+vim.keymap.set('n', 'q:', '<nop>')
+vim.keymap.set('n', 'q/', '<nop>')
+vim.keymap.set('n', 'q?', '<nop>')
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -200,10 +203,10 @@ vim.keymap.set('n', 'Q', '<nop>', { desc = 'Disable Ex mode' })
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- TIP: Disable arrow keys in normal mode
-vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
-vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
-vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
-vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+-- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
+-- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
+-- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
+-- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -213,6 +216,12 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- Resize window using <ctrl> arrow keys
+vim.keymap.set("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
+vim.keymap.set("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
+vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Window Width" })
+vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -418,121 +427,6 @@ require('lazy').setup({
     },
   },
 
-  -- NOTE: Plugins can specify dependencies.
-  --
-  -- The dependencies are proper plugin specifications as well - anything
-  -- you do for a plugin at the top level, you can do for a dependency.
-  --
-  -- Use the `dependencies` key to specify the dependencies of a particular plugin
-
-  -- ==============================
-  --          TELESCOPE
-  -- ==============================
-  -- { -- Fuzzy Finder (files, lsp, etc)
-  --   'nvim-telescope/telescope.nvim',
-  --   event = 'VimEnter',
-  --   dependencies = {
-  --     'nvim-lua/plenary.nvim',
-  --     { -- If encountering errors, see telescope-fzf-native README for installation instructions
-  --       'nvim-telescope/telescope-fzf-native.nvim',
-  --
-  --       -- `build` is used to run some command when the plugin is installed/updated.
-  --       -- This is only run then, not every time Neovim starts up.
-  --       build = 'make',
-  --
-  --       -- `cond` is a condition used to determine whether this plugin should be
-  --       -- installed and loaded.
-  --       cond = function()
-  --         return vim.fn.executable 'make' == 1
-  --       end,
-  --     },
-  --     { 'nvim-telescope/telescope-ui-select.nvim' },
-  --
-  --     -- Useful for getting pretty icons, but requires a Nerd Font.
-  --     { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
-  --   },
-  --   config = function()
-  --     -- Telescope is a fuzzy finder that comes with a lot of different things that
-  --     -- it can fuzzy find! It's more than just a "file finder", it can search
-  --     -- many different aspects of Neovim, your workspace, LSP, and more!
-  --     --
-  --     --
-  --     -- The easiest way to use Telescope, is to start by doing something like:
-  --     --  :Telescope help_tags
-  --     --
-  --     -- After running this command, a window will open up and you're able to
-  --     -- type in the prompt window. You'll see a list of `help_tags` options and
-  --     -- a corresponding preview of the help.
-  --     --
-  --     -- Two important keymaps to use while in Telescope are:
-  --     --  - Insert mode: <c-/>
-  --     --  - Normal mode: ?
-  --     --
-  --     -- This opens a window that shows you all of the keymaps for the current
-  --     -- Telescope picker. This is really useful to discover what Telescope can
-  --     -- do as well as how to actually do it!
-  --
-  --     -- [[ Configure Telescope ]]
-  --     -- See `:help telescope` and `:help telescope.setup()`
-  --     require('telescope').setup {
-  --       -- You can put your default mappings / updates / etc. in here
-  --       --  All the info you're looking for is in `:help telescope.setup()`
-  --       --
-  --       -- defaults = {
-  --       --   mappings = {
-  --       --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-  --       --   },
-  --       -- },
-  --       -- pickers = {}
-  --       extensions = {
-  --         ['ui-select'] = {
-  --           require('telescope.themes').get_dropdown(),
-  --         },
-  --       },
-  --     }
-  --
-  --     -- Enable Telescope extensions if they are installed
-  --     pcall(require('telescope').load_extension, 'fzf')
-  --     pcall(require('telescope').load_extension, 'ui-select')
-  --
-  --     -- See `:help telescope.builtin`
-  --     local builtin = require 'telescope.builtin'
-  --     vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
-  --     vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-  --     vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
-  --     vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
-  --     vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-  --     vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
-  --     vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-  --     vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
-  --     vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-  --     vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
-  --
-  --     -- Slightly advanced example of overriding default behavior and theme
-  --     vim.keymap.set('n', '<leader>/', function()
-  --       -- You can pass additional configuration to Telescope to change the theme, layout, etc.
-  --       builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-  --         winblend = 10,
-  --         previewer = false,
-  --       })
-  --     end, { desc = '[/] Fuzzily search in current buffer' })
-  --
-  --     -- It's also possible to pass additional configuration options.
-  --     --  See `:help telescope.builtin.live_grep()` for information about particular keys
-  --     vim.keymap.set('n', '<leader>s/', function()
-  --       builtin.live_grep {
-  --         grep_open_files = true,
-  --         prompt_title = 'Live Grep in Open Files',
-  --       }
-  --     end, { desc = '[S]earch [/] in Open Files' })
-  --
-  --     -- Shortcut for searching your Neovim configuration files
-  --     vim.keymap.set('n', '<leader>sn', function()
-  --       builtin.find_files { cwd = vim.fn.stdpath 'config' }
-  --     end, { desc = '[S]earch [N]eovim files' })
-  --   end,
-  -- },
-
   -- LSP Plugins
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
@@ -607,41 +501,12 @@ require('lazy').setup({
           end
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
-          map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+          map('gRn', vim.lsp.buf.rename, '[R]e[n]ame')
 
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
-          map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
+          map('gRa', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
 
-          -- -- Find references for the word under your cursor.
-          -- map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-          --
-          -- -- Jump to the implementation of the word under your cursor.
-          -- --  Useful when your language has ways of declaring types without an actual implementation.
-          -- map('gri', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-          --
-          -- -- Jump to the definition of the word under your cursor.
-          -- --  This is where a variable was first declared, or where a function is defined, etc.
-          -- --  To jump back, press <C-t>.
-          -- map('grd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-          --
-          -- -- INFO: This is not Goto Definition, this is Goto Declaration.
-          -- --  For example, in C this would take you to the header.
-          --
-          -- map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-          --
-          -- -- Fuzzy find all the symbols in your current document.
-          -- --  Symbols are things like variables, functions, types, etc.
-          -- map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')
-          --
-          -- -- Fuzzy find all the symbols in your current workspace.
-          -- --  Similar to document symbols, except searches over your entire project.
-          -- map('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Open Workspace Symbols')
-          --
-          -- -- Jump to the type of the word under your cursor.
-          -- --  Useful when you're not sure what type a variable is and you want to see
-          -- --  the definition of its *type*, not where it was *defined*.
-          -- map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
 
           -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
           ---@param client vim.lsp.Client
@@ -716,19 +581,6 @@ require('lazy').setup({
           },
         },
         virtual_text = false,
-        -- virtual_text = {
-        --   source = 'if_many',
-        --   spacing = 2,
-        --   format = function(diagnostic)
-        --     local diagnostic_message = {
-        --       [vim.diagnostic.severity.ERROR] = diagnostic.message,
-        --       [vim.diagnostic.severity.WARN] = diagnostic.message,
-        --       [vim.diagnostic.severity.INFO] = diagnostic.message,
-        --       [vim.diagnostic.severity.HINT] = diagnostic.message,
-        --     }
-        --     return diagnostic_message[diagnostic.severity]
-        --   end,
-        -- },
       }
 
       -- LSP servers and clients are able to communicate to each other what features they support.
@@ -981,51 +833,58 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    -- 'ellisonleao/gruvbox.nvim',
-    -- priority = 1000, -- Make sure to load this before all the other start plugins.
-    -- config = function()
-    --   ---@diagnostic disable-next-line: missing-fields
-    --   -- Default options:
-    --   require('gruvbox').setup {
-    --     terminal_colors = true, -- add neovim terminal colors
-    --     undercurl = true,
-    --     underline = true,
-    --     bold = true,
-    --     italic = {
-    --       strings = false,
-    --       emphasis = true,
-    --       comments = false,
-    --       operators = false,
-    --       folds = true,
-    --     },
-    --     strikethrough = true,
-    --     invert_selection = false,
-    --     invert_signs = false,
-    --     invert_tabline = false,
-    --     inverse = true, -- invert background for search, diffs, statuslines and errors
-    --     contrast = '', -- can be "hard", "soft" or empty string
-    --     palette_overrides = {},
-    --     overrides = {},
-    --     dim_inactive = false,
-    --     transparent_mode = false,
-    --   }
-    --
-      -- vim.cmd.colorscheme 'gruvbox'
-    -- end,
+    {
+      'ellisonleao/gruvbox.nvim',
+      priority = 1000, -- Make sure to load this before all the other start plugins.
+      config = function()
+        ---@diagnostic disable-next-line: missing-fields
+        -- Default options:
+        require('gruvbox').setup {
+          terminal_colors = true, -- add neovim terminal colors
+          undercurl = true,
+          underline = true,
+          bold = true,
+          italic = {
+            strings = false,
+            emphasis = true,
+            comments = false,
+            operators = false,
+            folds = true,
+          },
+          strikethrough = true,
+          invert_selection = false,
+          invert_signs = false,
+          invert_tabline = false,
+          inverse = true, -- invert background for search, diffs, statuslines and errors
+          contrast = '', -- can be "hard", "soft" or empty string
+          palette_overrides = {},
+          overrides = {},
+          dim_inactive = false,
+          transparent_mode = false,
+        }
 
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('tokyonight').setup {
-        styles = {
-          comments = { italic = false }, -- Disable italics in comments
-          keywords = { italic = false }
-        },
-      }
+      --   vim.cmd.colorscheme 'gruvbox'
+      end,
+    },
 
-      vim.cmd.colorscheme 'tokyonight-night'
-    end,
+    {
+      'folke/tokyonight.nvim',
+      priority = 1000, -- Make sure to load this before all the other start plugins.
+      config = function()
+        ---@diagnostic disable-next-line: missing-fields
+        require('tokyonight').setup {
+          -- transparent = true,
+          styles = {
+            comments = { italic = false }, -- Disable italics in comments
+            keywords = { italic = false },
+            -- sidebars = 'transparent',
+            -- floats = 'transparent',
+          },
+        }
+
+        vim.cmd.colorscheme 'tokyonight-night'
+      end,
+    },
 
   },
 
@@ -1101,7 +960,7 @@ require('lazy').setup({
       { "<leader>sD", function() Snacks.picker.diagnostics_buffer() end, desc = "Buffer Diagnostics" },
       { "<leader>sh", function() Snacks.picker.help() end, desc = "Help Pages" },
       -- { "<leader>sH", function() Snacks.picker.highlights() end, desc = "Highlights" },
-      { "<leader>si", function() Snacks.picker.icons() end, desc = "Icons" },
+      -- { "<leader>si", function() Snacks.picker.icons() end, desc = "Icons" },
       { "<leader>sj", function() Snacks.picker.jumps() end, desc = "Jumps" },
       { "<leader>sk", function() Snacks.picker.keymaps() end, desc = "Keymaps" },
       { "<leader>sl", function() Snacks.picker.loclist() end, desc = "Location List" },
@@ -1138,6 +997,41 @@ require('lazy').setup({
       { "]]",         function() Snacks.words.jump(vim.v.count1) end, desc = "Next Reference", mode = { "n", "t" } },
       { "[[",         function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference", mode = { "n", "t" } },
     },
+  },
+
+  {
+    'akinsho/bufferline.nvim',
+    keys ={
+      { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle Pin" },
+      { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete Non-Pinned Buffers" },
+      { "<leader>br", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete Buffers to the Right" },
+      { "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>", desc = "Delete Buffers to the Left" },
+      { "<S-h>", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer" },
+      { "<S-l>", "<cmd>BufferLineCycleNext<cr>", desc = "Next Buffer" },
+      { "[b", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer" },
+      { "]b", "<cmd>BufferLineCycleNext<cr>", desc = "Next Buffer" },
+      { "[B", "<cmd>BufferLineMovePrev<cr>", desc = "Move buffer prev" },
+      { "]B", "<cmd>BufferLineMoveNext<cr>", desc = "Move buffer next" },
+    },
+    config = function()
+      local bufferline = require('bufferline')
+      bufferline.setup({
+        options = {
+          -- separator_style = 'slant',
+          style_preset = bufferline.style_preset.no_italic,
+          indicator = {
+            icon = '▎',
+            style = 'icon'
+          },
+          always_show_bufferline = true;
+          auto_toggle_bufferline = true;
+        },
+
+      })
+    end,
+
+    version = "*", 
+    dependencies = 'nvim-tree/nvim-web-devicons'
   },
 
   { -- Collection of various small independent plugins/modules
@@ -1195,7 +1089,7 @@ require('lazy').setup({
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
         --  If you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
+        -- additional_vim_regex_highlighting = { 'ruby' },
       },
       indent = { enable = true, disable = { 'ruby' } },
     },
