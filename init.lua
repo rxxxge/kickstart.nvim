@@ -270,14 +270,24 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 -- For C and CPP comments
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'c', 'cpp' },
-  callback = function()
-    vim.opt_local.formatoptions:append 'r'
-    vim.opt_local.formatoptions:append 'o'
-    vim.opt_local.comments = 'sO:* -,mO:*  ,exO:*/,s1:/*,mb:*,ex:*/,://'
-  end,
-})
+-- vim.api.nvim_create_autocmd('FileType', {
+--   pattern = { 'c', 'cpp' },
+--   callback = function()
+--     vim.opt_local.formatoptions:append 'r'
+--     vim.opt_local.formatoptions:append 'o'
+--     vim.opt_local.comments = 'sl:/*,mb: *,elx: */'
+--   end,
+-- })
+
+vim.keymap.set('n', '<leader>gkc', function()
+  local line = vim.fn.line('.')
+  vim.fn.append(line - 1, {
+    '/*',
+    ' * ',
+    ' */',
+  })
+  vim.cmd('normal! j$')
+end, { buffer = true, desc = 'Insert block comment template' })
 
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'c', 'h' },
@@ -863,7 +873,6 @@ require('lazy').setup({
           transparent_mode = false,
         }
 
-      --   vim.cmd.colorscheme 'gruvbox'
       end,
     },
 
@@ -882,6 +891,7 @@ require('lazy').setup({
           },
         }
 
+        -- vim.cmd.colorscheme 'gruvbox'
         vim.cmd.colorscheme 'tokyonight-night'
       end,
     },
