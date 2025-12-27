@@ -279,7 +279,7 @@ vim.api.nvim_create_autocmd('FileType', {
 --   end,
 -- })
 
-vim.keymap.set('n', '<leader>gkc', function()
+vim.keymap.set('n', '<leader>gcb', function()
   local line = vim.fn.line('.')
   vim.fn.append(line - 1, {
     '/*',
