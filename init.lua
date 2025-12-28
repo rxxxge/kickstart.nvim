@@ -324,13 +324,13 @@ require('lazy').setup({
     end,
   },
 
-  {
-    "OXY2DEV/markview.nvim",
-    lazy = false,
-
-    -- Completion for `blink.cmp`
-    -- dependencies = { "saghen/blink.cmp" },
-  },
+  -- {
+  --   "OXY2DEV/markview.nvim",
+  --   lazy = false,
+  --
+  --   -- Completion for `blink.cmp`
+  --   -- dependencies = { "saghen/blink.cmp" },
+  -- },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -911,13 +911,13 @@ require('lazy').setup({
       bigfile = { enabled = true },
       dashboard = { enabled = true },
       explorer = { enabled = true },
-      indent = { enabled = true },
+      indent = { enabled = false },
       input = { enabled = true },
       picker = { enabled = true },
       notifier = { enabled = false },
       quickfile = { enabled = true },
-      scope = { enabled = true },
-      scroll = { enabled = true },
+      scope = { enabled = false },
+      scroll = { enabled = false },
       statuscolumn = { enabled = true },
       words = { enabled = true },
       zen = { enabled = true },
