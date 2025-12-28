@@ -907,6 +907,7 @@ require('lazy').setup({
     lazy = false,
     ---@type snacks.Config
     opts = {
+      animate = { enabled = false },
       bigfile = { enabled = true },
       dashboard = { enabled = true },
       explorer = { enabled = true },
