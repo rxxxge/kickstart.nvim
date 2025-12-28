@@ -911,7 +911,7 @@ require('lazy').setup({
       bigfile = { enabled = true },
       dashboard = { enabled = true },
       explorer = { enabled = true },
-      indent = { enabled = false },
+      indent = { enabled = true },
       input = { enabled = true },
       picker = { enabled = true },
       notifier = { enabled = false },
