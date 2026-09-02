@@ -170,7 +170,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'c', 'cpp' },
+  pattern = { 'c', 'cpp', 'asm' },
   callback = function()
     if vim.bo.filetype == 'c' then
       vim.bo.tabstop = 4
@@ -262,7 +262,7 @@ require('lazy').setup({
   { import = 'custom.plugins.bufferline' },
   { import = 'custom.plugins.mini' },
 
-  { import = 'custom.plugins.nvim-treesitter' },
+  { import = 'custom.plugins.tree-sitter-manager' },
 
   { import = 'custom.plugins.autopairs' },
   -- NOTE: Next step on your Neovim journey: Add/Configure additional plugins for Kickstart
