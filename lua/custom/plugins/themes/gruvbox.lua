@@ -35,6 +35,6 @@ return {
 	  transparent_mode = false,
 	}
 
-	vim.cmd.colorscheme 'gruvbox'
+	-- vim.cmd.colorscheme 'gruvbox'
 	end,
 }

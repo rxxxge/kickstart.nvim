@@ -252,8 +252,9 @@ require('lazy').setup({
   { import = 'custom.plugins.blink' },
 
   -- Themes
-  -- { import = 'custom.plugins.gruvbox' },
-  { import = 'custom.plugins.tokyonight' },
+  { import = 'custom.plugins.themes.gruvbox' },
+  { import = 'custom.plugins.themes.tokyonight' },
+  { import = 'custom.plugins.themes.melange' },
   --
 
   { import = 'custom.plugins.folke.todo-comments' },
